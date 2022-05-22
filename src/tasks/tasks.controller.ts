@@ -17,7 +17,7 @@ export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  getAllTasks(): Task[] {
+  getTasks(): Task[] {
     return this.tasksService.getAllTasks();
   }
 
