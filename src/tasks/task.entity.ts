@@ -18,6 +18,6 @@ export class Task {
   status: TaskStatus;
 
   @ManyToOne((_type) => User, (user) => user.tasks, { eager: false })
-  @Exclude({ toPlainOnly: true })
+  @Exclude({ toPlainOnly: true }) // Sempre que esse objeto for fornecido em texto simples(json), a propriedade user será excluída
   user: User;
 }
