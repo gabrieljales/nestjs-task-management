@@ -21,7 +21,7 @@ export class TasksService {
 
   // Retorno é uma promise do tipo Task
   async getTaskById(id: string, user: User): Promise<Task> {
-    const found = await this.tasksRepository.findOne({ where: { id, user } });
+    const found = await this.tasksRepository.findOne({ where: { id, user } }); // Outra maneira de fazer isso no método delete
 
     if (!found) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
@@ -34,8 +34,8 @@ export class TasksService {
     return this.tasksRepository.createTask(createTaskDto, user);
   }
 
-  async deleteTask(id: string): Promise<void> {
-    const result = await this.tasksRepository.delete(id);
+  async deleteTask(id: string, user: User): Promise<void> {
+    const result = await this.tasksRepository.delete({ id, user });
 
     // Se nenhuma linha do BD foi afetada, significa que o objeto com esse ID não existe
     if (result.affected === 0) {
