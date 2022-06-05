@@ -18,7 +18,9 @@ import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { Task } from './task.entity';
 import { TasksService } from './tasks.service';
 import { Logger } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tasks')
 @Controller('tasks') // Rota /tasks
 @UseGuards(AuthGuard()) // Protegendo uma rota
 export class TasksController {
