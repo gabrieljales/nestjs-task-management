@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TasksModule } from './tasks/tasks.module';
+import { TasksModule } from './modules/tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
+import { typeOrmAsyncConfig } from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -12,24 +13,7 @@ import { configValidationSchema } from './config.schema';
       validationSchema: configValidationSchema,
     }),
     TasksModule,
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const isProduction = configService.get('STAGE') === 'prod'; // Bool
-
-        return {
-          ssl: isProduction,
-          extra: {
-            ssl: isProduction ? { rejectUnauthorized: false } : null,
-          },
-          type: 'postgres',
-          url: configService.get('DATABASE_URL'),
-          autoLoadEntities: true, // Seguir a convenção name.entity.ts
-          synchronize: true, // Não recomendado em produção
-        };
-      },
-    }),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     AuthModule,
   ],
 })
